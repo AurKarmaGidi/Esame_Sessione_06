@@ -1,0 +1,123 @@
+@use '../../variables' as *;
+
+// Step di progresso
+.registration-progress {
+  margin-bottom: 5px;
+}
+
+.progress-step {
+  text-align: center;
+  flex: 1;
+  margin-bottom: -40px;
+
+  &.completed {
+    .step-circle {
+      background-color: $color-primary;
+    }
+
+    .step-label {
+      color: white;
+    }
+  }
+
+  &.active {
+    .step-circle {
+      background-color: $color-primary;
+      box-shadow: 0 0 0 5px $color-glow;
+    }
+
+    .step-label {
+      color: $color-primary;
+      font-weight: bold;
+    }
+  }
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: $color-bg-gray-medium;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin: 0 auto 8px;
+  text-decoration: none;
+}
+
+.step-label {
+  font-size: 12px;
+  color: $color-text-gray;
+}
+
+// Linea tra gli step
+.progress-connector {
+  flex: 6;
+  height: 2px;
+  background-color: $color-bg-gray-medium;
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+// Stili per il form di registrazione dettagliato
+#registrazioneForm {
+  .form-control {
+    background-color: $color-bg-darker;
+    color: $color-text-light;
+
+    &::placeholder {
+      color: $color-text-placeholder-dark;
+    }
+
+    &:focus {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 0.2rem $color-focus-shadow;
+    }
+  }
+
+  .form-select:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 0.2rem $color-focus-shadow;
+  }
+
+  .form-check-input:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 0.2rem $color-focus-shadow;
+  }
+}
+
+// Stili per select nazione
+select#nazione option {
+  background-color: $color-bg-darker;
+  color: white;
+}
+
+// Checkbox
+.form-check-input:checked {
+  background-color: $color-primary;
+  border-color: $color-primary;
+}
+
+// Stili per il bottone rosa
+.btn-pink {
+  background-color: #ff0066 !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 30px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+
+  &:hover:not(:disabled) {
+    background-color: #cc0052 !important;
+    transform: scale(1.02) !important;
+  }
+
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+}

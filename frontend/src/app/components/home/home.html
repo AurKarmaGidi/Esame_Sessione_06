@@ -1,0 +1,106 @@
+<!-- Background -->
+<main class="bg-grid flex-grow-1">
+  <div class="bg-grid-tiles">
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=1');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=2');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=3');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=4');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=5');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=6');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=7');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=8');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=9');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=10');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=11');"></div>
+    <div class="bg-grid-tile" style="background-image:url('https://picsum.photos/600/400?random=12');"></div>
+  </div>
+
+  <!-- Contenuto centrale -->
+  <div class="overlay-dark d-flex justify-content-center align-items-center py-4">
+    <div class="container px-3">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <div class="bg-dark bg-opacity-75 rounded shadow-lg text-center registration-box">
+            <h1 class="display-5 fw-bold mb-3 mb-md-4">
+              {{ 'home.title' | translate }}
+            </h1>
+            <p class="text-white mb-3 mb-md-4 text-center">
+              <span class="d-sm-inline">{{ 'home.subtitle' | translate }}</span>
+              <img src="img/code.png" alt="Logo" class="logo-inline">
+            </p>
+            <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+              <div class="row g-2 justify-content-center align-items-stretch">
+                <div class="col-12 col-md-8">
+                  <div class="input-group h-100">
+                    <input type="email" class="form-control email-input rounded"
+                      [placeholder]="'home.email_placeholder' | translate" [(ngModel)]="email" name="email" required
+                      email #emailField="ngModel">
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 d-flex">
+                  <button type="button"
+                    class="btn btn-pink btn-registrati w-100 d-flex align-items-center justify-content-center rounded"
+                    (click)="onRegister()" [disabled]="!registerForm.valid">
+                    {{ 'button.register' | translate | uppercase }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Messaggio di errore per email non valida -->
+              @if (emailField.invalid && (emailField.dirty || emailField.touched)) {
+              <div class="text-danger small mt-2 text-start">
+                @if (emailField.errors?.['required']) {
+                <span>{{ 'validation.email_required' | translate }}</span>
+                }
+                @if (emailField.errors?.['email']) {
+                <span>{{ 'validation.email_invalid' | translate }}</span>
+                }
+              </div>
+              }
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal ACCEDI -->
+<div class="modal fade" id="modalAccedi" tabindex="-1" aria-labelledby="modalAccediLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 code-pink" id="modalAccediLabel">{{ 'nav.login' | translate | uppercase }}</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+          <div class="mb-3">
+            <label for="emailModal" class="form-label">{{ 'user.email' | translate }}</label>
+            <input type="email" class="form-control bg-dark text-white" id="emailModal" [(ngModel)]="loginEmail"
+              name="loginEmail" [ngModelOptions]="{standalone: true}"
+              [placeholder]="'user.email_placeholder' | translate" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">{{ 'user.password' | translate }}</label>
+            <input type="password" class="form-control bg-dark text-white" id="password" [(ngModel)]="loginPassword"
+              name="loginPassword" [ngModelOptions]="{standalone: true}"
+              [placeholder]="'user.password_placeholder' | translate" required>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-pink btn-sm btn-accedi w-100 w-sm-auto" (click)="onLogin()">
+          {{ 'nav.login' | translate | uppercase }}
+        </button>
+        <button type="button" class="btn btn-dark border-white btn-sm btn-accedi w-100 w-sm-auto"
+          routerLink="/registrazione">
+          {{ 'button.register' | translate | uppercase }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

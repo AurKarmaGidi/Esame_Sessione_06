@@ -1,0 +1,29 @@
+<div class="dropdown">
+  <button class="btn btn-sm btn-outline-secondary dropdown-toggle language-selector" type="button"
+    data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="me-1">{{ currentLanguage?.flag || '🌐' }}</span>
+    {{ currentLanguage?.name }}
+  </button>
+  <ul class="dropdown-menu dropdown-menu-dark">
+    @for (lang of supportedLanguages; track lang.code) {
+    <li>
+      <!-- Verifica se la lingua è abilitata (solo 'it' e 'en') -->
+      @if (isLanguageEnabled(lang.code)) {
+      <!-- Lingua abilitata - cliccabile -->
+      <a class="dropdown-item" [class.active]="lang.code === currentLanguage?.code" href="javascript:void(0)"
+        (click)="changeLanguage(lang.code)">
+        <span class="me-2">{{ lang.flag || '🌐' }}</span>
+        {{ lang.name }}
+      </a>
+      } @else {
+      <!-- Lingua disabilitata - non cliccabile, con opacità ridotta -->
+      <span class="dropdown-item disabled" style="opacity: 0.5; cursor: not-allowed;"
+        title="Traduzioni non ancora disponibili">
+        <span class="me-2">{{ lang.flag || '🌐' }}</span>
+        {{ lang.name }} (presto disponibile)
+      </span>
+      }
+    </li>
+    }
+  </ul>
+</div>

@@ -1,0 +1,167 @@
+<main class="container-fluid px-3 px-sm-4 py-4 flex-grow-1 bg-dark" style="min-height: calc(100vh - 200px);">
+
+  <!-- Header della pagina -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/" class="text-secondary text-decoration-none">Home</a></li>
+          <li class="breadcrumb-item active code-pink" aria-current="page">{{ formatGenreName(genre) }}</li>
+        </ol>
+      </nav>
+
+      <h1 class="code-pink">
+        <i class="bi bi-collection-fill me-2"></i>
+        Categoria: {{ formatGenreName(genre) }}
+      </h1>
+      <p class="text-secondary">
+        Esplora tutti i film e le serie TV di genere {{ formatGenreName(genre) }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Loading spinner generale -->
+  @if (loading) {
+  <div class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Caricamento...</span>
+    </div>
+  </div>
+  }
+
+  @if (!loading) {
+  <!-- Sezione FILM -->
+  <section class="mb-5">
+    <div class="d-flex align-items-center mb-3">
+      <h2 class="section-title h4 code-pink me-2">
+        <i class="bi bi-film me-2"></i>
+        Film
+      </h2>
+      @if (!moviesEmpty) {
+      <span class="badge bg-primary">{{ movies.length }} film</span>
+      }
+    </div>
+
+    @if (moviesLoading) {
+    <div class="text-center py-4">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Caricamento film...</span>
+      </div>
+    </div>
+    } @else if (moviesEmpty) {
+    <!-- Nessun film disponibile -->
+    <div class="empty-section text-center py-4 mb-4">
+      <i class="bi bi-film" style="font-size: 3rem; color: #ff0066; opacity: 0.3;"></i>
+      <p class="text-secondary mt-2 mb-0">
+        Stiamo lavorando per voi, arriveranno presto nuovi Film di questo genere
+      </p>
+    </div>
+    } @else {
+    <!-- Carosello film -->
+    <div [id]="getMoviesCarouselId()" class="carousel slide movie-carousel" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        @for (slide of calculateMovieSlides(); track slideIndex; let slideIndex = $index) {
+        <div class="carousel-item" [class.active]="slideIndex === 0">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2 g-sm-3">
+            @for (movie of movies.slice(slideIndex * 5, slideIndex * 5 + 5); track movie.id) {
+            <div class="col">
+              <a href="javascript:void(0)" class="movie-card text-decoration-none d-block h-100"
+                (click)="goToMovie(movie.id, $event)">
+                <img [src]="movie.poster || 'https://via.placeholder.com/300x450?text=No+Poster'"
+                  class="img-fluid w-100" [alt]="movie.title" loading="lazy">
+                <span class="movie-card-title">{{ movie.title }}</span>
+                <span class="movie-card-year">{{ movie.release_year }}</span>
+              </a>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Controlli del carosello film -->
+      @if (movies.length > 5) {
+      <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#' + getMoviesCarouselId()"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Precedente</span>
+      </button>
+      <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#' + getMoviesCarouselId()"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Successivo</span>
+      </button>
+      }
+    </div>
+    }
+  </section>
+
+  <!-- Sezione SERIE TV -->
+  <section class="mb-5">
+    <div class="d-flex align-items-center mb-3">
+      <h2 class="section-title h4 code-pink me-2">
+        <i class="bi bi-tv-fill me-2"></i>
+        Serie TV
+      </h2>
+      @if (!seriesEmpty) {
+      <span class="badge bg-primary">{{ series.length }} serie</span>
+      }
+    </div>
+
+    @if (seriesLoading) {
+    <div class="text-center py-4">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Caricamento serie...</span>
+      </div>
+    </div>
+    } @else if (seriesEmpty) {
+    <!-- Nessuna serie disponibile -->
+    <div class="empty-section text-center py-4 mb-4">
+      <i class="bi bi-tv-fill" style="font-size: 3rem; color: #ff0066; opacity: 0.3;"></i>
+      <p class="text-secondary mt-2 mb-0">
+        Stiamo lavorando per voi, arriveranno presto nuove Serie TV di questo genere
+      </p>
+    </div>
+    } @else {
+    <!-- Carosello serie -->
+    <div [id]="getSeriesCarouselId()" class="carousel slide movie-carousel" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        @for (slide of calculateSeriesSlides(); track slideIndex; let slideIndex = $index) {
+        <div class="carousel-item" [class.active]="slideIndex === 0">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2 g-sm-3">
+            @for (serie of series.slice(slideIndex * 5, slideIndex * 5 + 5); track serie.id) {
+            <div class="col">
+              <a href="javascript:void(0)" class="movie-card text-decoration-none d-block h-100"
+                (click)="goToSeries(serie.id, $event)">
+                <img [src]="serie.poster || 'https://via.placeholder.com/300x450?text=No+Poster'"
+                  class="img-fluid w-100" [alt]="serie.title" loading="lazy">
+                <span class="movie-card-title">{{ serie.title }}</span>
+                <span class="movie-card-info">{{ serie.seasons }} stagioni</span>
+              </a>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Controlli del carosello serie -->
+      @if (series.length > 5) {
+      <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#' + getSeriesCarouselId()"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Precedente</span>
+      </button>
+      <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#' + getSeriesCarouselId()"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Successivo</span>
+      </button>
+      }
+    </div>
+
+    }
+  </section>
+
+  }
+</main>

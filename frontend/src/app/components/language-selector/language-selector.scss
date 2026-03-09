@@ -1,0 +1,39 @@
+@use '../../variables' as *;
+
+.language-selector {
+  border-color: $color-border-light;
+  color: $color-text-light;
+  
+  &:hover {
+    background-color: $color-bg-gray;
+    border-color: $color-primary;
+  }
+  
+  .dropdown-menu {
+    background-color: $color-bg-gray-dark;
+    border: 1px solid $color-border-light;
+    
+    .dropdown-item {
+      color: $color-text-light;
+      transition: all 0.2s ease;
+      
+      &:hover:not(.disabled) {
+        background-color: $color-primary;
+      }
+      
+      &.active {
+        background-color: $color-primary;
+        font-weight: bold;
+      }
+      
+      &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        
+        &:hover {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}

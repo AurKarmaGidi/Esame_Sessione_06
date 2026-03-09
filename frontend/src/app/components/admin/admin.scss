@@ -1,0 +1,220 @@
+@use '../../variables' as *;
+
+.admin-dashboard {
+  color: $color-text-light;
+  
+  // Tabs di navigazione
+  .nav-tabs {
+    border-bottom-color: $color-border-light;
+    
+    .nav-link {
+      color: $color-text-gray;
+      border: none;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      
+      &:hover {
+        color: $color-text-light;
+        border-color: transparent;
+      }
+      
+      &.active {
+        background-color: transparent;
+        color: $color-primary;
+        border-bottom: 2px solid $color-primary;
+      }
+      
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  // Cards
+  .card {
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 0, 102, 0.2);
+    }
+  }
+
+  // Tabelle
+  .table {
+    th {
+      color: $color-text-gray;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom-color: $color-border-light;
+    }
+    
+    td {
+      vertical-align: middle;
+      border-bottom-color: $color-border-light;
+    }
+    
+    .table-active {
+      background-color: rgba($color-primary, 0.1) !important;
+    }
+  }
+
+  // Form selects e inputs
+  .form-select-sm, .form-control-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  // Badge personalizzati
+  .badge {
+    padding: 0.4rem 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  // Bottoni azioni
+  .btn-group-sm {
+    .btn {
+      padding: 0.2rem 0.6rem;
+      
+      i {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  // Card film/serie nella lista
+  .col-md-6.col-lg-4 {
+    .card {
+      overflow: hidden;
+      
+      .row {
+        height: 100%;
+      }
+      
+      .col-4 {
+        img {
+          min-height: 150px;
+        }
+      }
+      
+      .card-body {
+        padding: 0.75rem;
+      }
+      
+      .btn-group {
+        position: absolute;
+        bottom: 0.75rem;
+        right: 0.75rem;
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+        
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  // Alert personalizzati
+  .alert {
+    border-radius: 4px;
+    border: none;
+    
+    &.alert-success {
+      background-color: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+    }
+    
+    &.alert-danger {
+      background-color: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+    }
+    
+    &.alert-info {
+      background-color: rgba(23, 162, 184, 0.2);
+      color: #17a2b8;
+    }
+  }
+
+  // Modal
+  .modal-content {
+    border: 1px solid $color-border-light;
+    
+    .modal-header {
+      border-bottom-color: $color-border-light;
+      
+      .modal-title {
+        font-weight: 600;
+      }
+    }
+    
+    .modal-footer {
+      border-top-color: $color-border-light;
+    }
+  }
+
+  // Responsive
+  @media (max-width: $breakpoint-md) {
+    .nav-tabs {
+      .nav-link {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+    
+    .table {
+      font-size: 0.85rem;
+    }
+    
+    .col-md-6.col-lg-4 {
+      .card {
+        .btn-group {
+          position: static;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+// Stili per il bottone rosa
+.btn-pink {
+  background-color: $color-primary !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary-dark !important;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  i {
+    font-size: 0.9rem;
+  }
+}
+
+.bg-pink {
+  background-color: $color-primary !important;
+  color: white !important;
+}
+
+.bg-white {
+  background-color:white !important;
+  color:  $color-primary !important;
+}

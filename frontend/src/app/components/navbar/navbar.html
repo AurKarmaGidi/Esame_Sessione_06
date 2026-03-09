@@ -1,0 +1,260 @@
+<!-- Navbar -->
+<header class="bg-black">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-lg-3">
+    <div class="container-fluid">
+
+      <a class="navbar-brand d-flex align-items-center" routerLink="/">
+        <img src="img/code.png" alt="Logo" class="logo-img">
+      </a>
+
+      <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed"
+        aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" [class.show]="!isMenuCollapsed" id="navbarToggler">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{
+              'nav.home' | translate }}</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="tipologiaDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              {{ 'nav.type' | translate }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="tipologiaDropdown">
+              <li><a class="dropdown-item" routerLink="/movies" routerLinkActive="active">{{ 'nav.movies' | translate
+                  }}</a></li>
+              <li><a class="dropdown-item" routerLink="/series" routerLinkActive="active">{{ 'nav.series' | translate
+                  }}</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ 'nav.categories' | translate }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark categorie-menu" id="categorie-dropdown">
+              <li><a routerLink="/category/Azione" class="dropdown-item">{{ 'category.Azione' | translate }}</a></li>
+              <li><a routerLink="/category/Avventura" class="dropdown-item">{{ 'category.Avventura' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Animazione" class="dropdown-item">{{ 'category.Animazione' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Biografico" class="dropdown-item">{{ 'category.Biografico' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Commedia" class="dropdown-item">{{ 'category.Commedia' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Comico" class="dropdown-item">{{ 'category.Comico' | translate }}</a></li>
+              <li><a routerLink="/category/Documentario" class="dropdown-item">{{ 'category.Documentario' | translate
+                  }}</a></li>
+              <li><a routerLink="/category/Drammatico" class="dropdown-item">{{ 'category.Drammatico' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Erotico" class="dropdown-item">{{ 'category.Erotico' | translate }}</a></li>
+              <li><a routerLink="/category/Fantascienza" class="dropdown-item">{{ 'category.Fantascienza' | translate
+                  }}</a></li>
+              <li><a routerLink="/category/Fantasy" class="dropdown-item">{{ 'category.Fantasy' | translate }}</a></li>
+              <li><a routerLink="/category/Giallo" class="dropdown-item">{{ 'category.Giallo' | translate }}</a></li>
+              <li><a routerLink="/category/Guerra" class="dropdown-item">{{ 'category.Guerra' | translate }}</a></li>
+              <li><a routerLink="/category/Horror" class="dropdown-item">{{ 'category.Horror' | translate }}</a></li>
+              <li><a routerLink="/category/Mitologico" class="dropdown-item">{{ 'category.Mitologico' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Musicale" class="dropdown-item">{{ 'category.Musicale' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Noir" class="dropdown-item">{{ 'category.Noir' | translate }}</a></li>
+              <li><a routerLink="/category/Politico" class="dropdown-item">{{ 'category.Politico' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Poliziesco" class="dropdown-item">{{ 'category.Poliziesco' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Religioso" class="dropdown-item">{{ 'category.Religioso' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Sentimentale" class="dropdown-item">{{ 'category.Sentimentale' | translate
+                  }}</a></li>
+              <li><a routerLink="/category/Spionaggio" class="dropdown-item">{{ 'category.Spionaggio' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Sportivo" class="dropdown-item">{{ 'category.Sportivo' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Storico" class="dropdown-item">{{ 'category.Storico' | translate }}</a></li>
+              <li><a routerLink="/category/Thriller" class="dropdown-item">{{ 'category.Thriller' | translate }}</a>
+              </li>
+              <li><a routerLink="/category/Western" class="dropdown-item">{{ 'category.Western' | translate }}</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Search con risultati -->
+        <form class="d-flex align-items-center mb-2 mb-lg-0 position-relative search-form" role="search"
+          (submit)="$event.preventDefault()">
+          <div class="input-group input-group-sm search-container">
+            <input class="form-control search-input" type="search" [placeholder]="'search.placeholder' | translate"
+              aria-label="Cerca" [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}"
+              (keyup.enter)="onSearch()" (input)="onSearch()" (blur)="hideResults()">
+            <span class="input-group-text search-icon-wrapper" (click)="onSearch()">
+              <i class="bi bi-search search-icon"></i>
+            </span>
+          </div>
+
+          <!-- Dropdown risultati ricerca -->
+          @if (showSearchResults && searchResults.length > 0) {
+          <div class="search-results-dropdown">
+            @for (result of searchResults; track result.id + '_' + result.type) {
+            <div class="search-result-item" (mousedown)="selectResult(result)" (click)="selectResult(result)">
+              <img [src]="result.poster" [alt]="result.title" class="result-poster">
+              <div class="result-info">
+                <div class="result-title">{{ result.title }}</div>
+                <div class="result-type" [class.movie-type]="result.type === 'movie'"
+                  [class.series-type]="result.type === 'series'">
+                  {{ result.typeLabel }}
+                  @if (result.type === 'movie') {
+                  <span> · {{ result.release_year }}</span>
+                  } @else {
+                  <span> · {{ result.seasons }} {{ 'series.seasons' | translate }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+          }
+
+          <!-- Messaggio nessun risultato -->
+          @if (showSearchResults && searchResults.length === 0 && searchQuery.trim() !== '' && searchPerformed) {
+          <div class="search-results-dropdown no-results">
+            <div class="text-center p-3 text-secondary">
+              <i class="bi bi-exclamation-circle me-2"></i>
+              {{ 'search.no_results' | translate:{ query: searchQuery } }}
+            </div>
+          </div>
+          }
+        </form>
+
+        <!-- Selettore lingua -->
+        <div class="mx-2">
+          <app-language-selector></app-language-selector>
+        </div>
+
+        <!-- Sezione Utente / Login -->
+        @if (userName) {
+        <!-- Utente loggato - mostra dropdown -->
+        <div class="dropdown ms-lg-3 mt-2 mt-lg-0">
+          <a class="text-white text-decoration-none dropdown-toggle d-flex align-items-center" href="#" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="me-1">
+              <i class="bi bi-person-fill" style="font-size: 30px;"></i>
+            </span>
+            <span>{{ userName }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            @if (userRole === 'admin') {
+            <li><a class="dropdown-item code-pink" routerLink="/admin">{{ 'nav.admin' | translate }}</a></li>
+            }
+            <li><a class="dropdown-item code-pink" routerLink="/account">{{ 'nav.account' | translate }}</a></li>
+            <li><a class="dropdown-item code-pink" href="#" (click)="onLogout($event)">{{ 'nav.logout' | translate
+                }}</a></li>
+          </ul>
+        </div>
+        } @else {
+        <!-- Utente non loggato - mostra pulsante Accedi -->
+        <button class="btn btn-pink ms-lg-3 mt-2 mt-lg-0" (click)="openLoginModal()">
+          <i class="bi bi-box-arrow-in-right me-1"></i>
+          {{ 'nav.login' | translate }}
+        </button>
+        }
+
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Modal Login -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title code-pink" id="loginModalLabel">
+          <i class="bi bi-person-circle me-2"></i>
+          {{ 'nav.login' | translate }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Messaggio di errore -->
+        @if (loginError) {
+        <div class="alert alert-danger py-2" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ loginError }}
+        </div>
+        }
+
+        <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">{{ 'user.email' | translate }}</label>
+            <div class="input-group">
+              <span class="input-group-text bg-dark text-secondary border-secondary">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input type="email" class="form-control bg-dark text-white border-secondary" id="loginEmail"
+                [placeholder]="'user.email_placeholder' | translate" [(ngModel)]="loginEmail" name="loginEmail" required
+                #emailInput="ngModel">
+            </div>
+            @if (emailInput.invalid && (emailInput.dirty || emailInput.touched)) {
+            <div class="text-danger small mt-1">
+              {{ 'validation.email_invalid' | translate }}
+            </div>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">{{ 'user.password' | translate }}</label>
+            <div class="input-group">
+              <span class="input-group-text bg-dark text-secondary border-secondary">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input type="password" class="form-control bg-dark text-white border-secondary" id="loginPassword"
+                [placeholder]="'user.password_placeholder' | translate" [(ngModel)]="loginPassword" name="loginPassword"
+                required #passwordInput="ngModel">
+            </div>
+            @if (passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)) {
+            <div class="text-danger small mt-1">
+              {{ 'validation.password_required' | translate }}
+            </div>
+            }
+          </div>
+
+          <!-- Link recupero password -->
+          <div class="text-end mb-3">
+            <a href="#" class="text-decoration-none small code-pink">
+              {{ 'user.forgot_password' | translate }}
+            </a>
+          </div>
+
+          <!-- Bottoni di accesso -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-pink" [disabled]="!loginForm.valid || isLoggingIn">
+              @if (isLoggingIn) {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              }
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              {{ 'nav.login' | translate }}
+            </button>
+
+            <div class="text-center my-2 text-secondary">{{ 'common.or' | translate }}</div>
+
+            <button type="button" class="btn btn-outline-light" routerLink="/registrazione" data-bs-dismiss="modal">
+              <i class="bi bi-person-plus me-2"></i>
+              {{ 'button.register' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer border-secondary justify-content-center">
+        <small class="text-secondary">
+          {{ 'login.test_users' | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

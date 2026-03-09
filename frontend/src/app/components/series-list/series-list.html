@@ -1,0 +1,82 @@
+<main class="container-fluid px-3 px-sm-4 py-4 flex-grow-1 bg-dark" style="min-height: calc(100vh - 200px);">
+
+  <!-- Header della pagina -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="code-pink">
+        <i class="bi bi-tv-fill me-2"></i>
+        Tutte le Serie TV
+      </h1>
+      <p class="text-secondary">
+        Esplora tutte le serie disponibili, divise per genere
+      </p>
+    </div>
+  </div>
+
+  <!-- Loading spinner -->
+  @if (loading) {
+  <div class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Caricamento...</span>
+    </div>
+  </div>
+  }
+
+  @if (!loading) {
+  <!-- Se non ci sono serie -->
+  @if (genres.length === 0) {
+  <div class="alert alert-info text-center">
+    <i class="bi bi-info-circle-fill me-2"></i>
+    Nessuna serie disponibile al momento.
+  </div>
+  }
+
+  <!-- Per ogni genere, un carosello -->
+  @for (genre of genres; track genre) {
+  <section class="mb-5">
+    <div class="d-flex mb-3">
+      <h2 class="section-title h5 code-pink me-1">{{ genre }}</h2>
+      <h2 class="section-title h5 text-secondary">({{ seriesByGenre[genre].length }} serie)</h2>
+    </div>
+
+    <!-- Carosello per questo genere -->
+    <div [id]="getCarouselId(genre)" class="carousel slide movie-carousel" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <!-- Calcola quante slide sono necessarie (5 serie per slide) -->
+        @for (slide of calculateSlides(seriesByGenre[genre].length); track slideIndex; let slideIndex = $index) {
+        <div class="carousel-item" [class.active]="slideIndex === 0">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2 g-sm-3">
+            @for (serie of seriesByGenre[genre].slice(slideIndex * 5, slideIndex * 5 + 5); track serie.id) {
+            <div class="col">
+              <a href="javascript:void(0)" class="movie-card text-decoration-none d-block h-100"
+                (click)="goToSeries(serie.id, $event)">
+                <img [src]="serie.poster || 'https://via.placeholder.com/300x450?text=No+Poster'"
+                  class="img-fluid w-100" [alt]="serie.title" loading="lazy">
+                <span class="movie-card-title">{{ serie.title }}</span>
+                <span class="movie-card-info">{{ serie.seasons }} stagioni</span>
+              </a>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Controlli del carosello (solo se ci sono più di 5 serie) -->
+      @if (seriesByGenre[genre].length > 5) {
+      <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#' + getCarouselId(genre)"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Precedente</span>
+      </button>
+      <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#' + getCarouselId(genre)"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Successivo</span>
+      </button>
+      }
+    </div>
+  </section>
+  }
+  }
+</main>

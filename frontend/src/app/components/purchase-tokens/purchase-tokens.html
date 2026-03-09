@@ -1,0 +1,200 @@
+<main class="position-relative" style="background-color: rgb(28, 28, 28); min-height: calc(100vh - 200px);">
+  <!-- Step di progresso - Step 3 attivo -->
+  <div class="flex-grow-1 py-4">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="registration-progress mb-4 mb-md-5">
+            <div class="d-flex justify-content-between position-relative">
+              <div class="progress-step completed">
+                <a class="step-circle" routerLink="/" style="text-decoration: none;">1</a>
+                <div class="step-label">Email</div>
+              </div>
+              <div class="progress-connector"></div>
+              <div class="progress-step completed">
+                <a class="step-circle" routerLink="/registrazione" style="text-decoration: none;">2</a>
+                <div class="step-label">Dati Personali</div>
+              </div>
+              <div class="progress-connector"></div>
+              <div class="progress-step active">
+                <div class="step-circle">3</div>
+                <div class="step-label">Acquista Token</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid p-md-2">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="border-start border-end text-light border-0 p-md-4 mx-auto">
+          <div class="color-bg" data-bs-theme="dark">
+            <h1 class="text-center code-white">ACQUISTA TOKEN</h1>
+            <p class="text-center text-secondary mb-4">
+              Scegli un pacchetto di token per vedere film e serie TV in streaming
+            </p>
+
+            <!-- Messaggi di errore/successo -->
+            @if (errorMessage) {
+            <div class="alert alert-danger mx-3 mx-md-5" role="alert">
+              {{ errorMessage }}
+            </div>
+            }
+
+            @if (successMessage) {
+            <div class="alert alert-success mx-3 mx-md-5" role="alert">
+              {{ successMessage }}
+            </div>
+            }
+
+            <!-- Pacchetti token -->
+            <div class="row g-3 g-md-4 justify-content-center px-3 px-md-5 mb-4">
+              @for (pkg of tokenPackages; track pkg.id) {
+              <div class="col-12 col-sm-6 col-md-3">
+                <div class="card bg-dark text-white border-secondary h-100 position-relative"
+                  [class.border-pink]="selectedPackage?.id === pkg.id" [class.popular-card]="pkg.popular"
+                  (click)="selectPackage(pkg)">
+
+                  @if (pkg.popular) {
+                  <div class="popular-badge">PIÙ POPOLARE</div>
+                  }
+
+                  <div class="card-body text-center">
+                    <div class="form-check position-absolute top-0 end-0 m-2">
+                      <input class="form-check-input" type="radio" name="tokenPackage"
+                        [checked]="selectedPackage?.id === pkg.id" (change)="selectPackage(pkg)">
+                    </div>
+
+                    <h3 class="card-title code-pink mt-3">{{ pkg.credits }}</h3>
+                    <p class="card-text display-6 fw-bold text-white mb-2">{{ pkg.price }} €</p>
+                    <p class="card-text text-secondary">Token</p>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+
+            <!-- Dettagli pagamento -->
+            <div class="payment-details mt-4 px-3 px-md-5">
+              <h5 class="mb-3">Dettagli di pagamento</h5>
+
+              <div class="row g-3">
+                <!-- Numero carta -->
+                <div class="col-12">
+                  <label for="cardNumber" class="form-label">Numero carta</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark text-secondary border-secondary">
+                      <i class="bi bi-credit-card"></i>
+                    </span>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="cardNumber"
+                      placeholder="1234 5678 9012 3456" [(ngModel)]="cardNumber" (ngModelChange)="formatCardNumber()"
+                      maxlength="19">
+                  </div>
+                </div>
+
+                <!-- Nome titolare -->
+                <div class="col-12">
+                  <label for="cardName" class="form-label">Nome titolare</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark text-secondary border-secondary">
+                      <i class="bi bi-person"></i>
+                    </span>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="cardName"
+                      placeholder="MARIO ROSSI" [(ngModel)]="cardName">
+                  </div>
+                </div>
+
+                <!-- Scadenza e CVV -->
+                <div class="col-md-6">
+                  <label for="cardExpiry" class="form-label">Scadenza</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark text-secondary border-secondary">
+                      <i class="bi bi-calendar"></i>
+                    </span>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="cardExpiry"
+                      placeholder="MM/AA" [(ngModel)]="cardExpiry" (ngModelChange)="formatExpiry()" maxlength="5">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="cardCvv" class="form-label">CVV</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark text-secondary border-secondary">
+                      <i class="bi bi-lock"></i>
+                    </span>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="cardCvv"
+                      placeholder="123" maxlength="3" [(ngModel)]="cardCvv">
+                  </div>
+                </div>
+
+                <!-- Metodo di pagamento alternativo -->
+                <div class="col-12 mt-3">
+                  <label class="form-label">Metodo di pagamento</label>
+                  <div class="d-flex gap-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
+                        value="credit_card" [(ngModel)]="paymentMethod">
+                      <label class="form-check-label" for="creditCard">
+                        <i class="bi bi-credit-card me-1"></i> Carta
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal"
+                        [(ngModel)]="paymentMethod">
+                      <label class="form-check-label" for="paypal">
+                        <i class="bi bi-paypal me-1"></i> PayPal
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Riepilogo acquisto -->
+              <div class="mt-4 p-3 bg-dark border border-secondary rounded">
+                <div class="d-flex justify-content-between">
+                  <span>Pacchetto selezionato:</span>
+                  <span class="fw-bold">{{ selectedPackage ? selectedPackage.credits + ' token' : 'Nessuno' }}</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span>Totale:</span>
+                  <span class="code-pink fw-bold">{{ selectedPackage ? selectedPackage.price + ' €' : '0 €' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottoni azione -->
+            <div class="row mt-5 pt-3">
+              <div class="col-12 d-flex justify-content-between px-3 px-md-5">
+                <button class="btn btn-outline-secondary" (click)="skipPurchase()">
+                  Salta per ora
+                </button>
+
+                <button class="btn btn-pink px-5" (click)="onPurchase()" [disabled]="!selectedPackage || isLoading">
+                  @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  }
+                  Acquista
+                </button>
+              </div>
+            </div>
+
+            <!-- Bottone per procedere (abilitato dopo acquisto) -->
+            @if (purchaseComplete) {
+            <div class="row mt-4">
+              <div class="col-12 text-center">
+                <button class="btn btn-success btn-lg px-5 py-3" (click)="goToAccount()">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  COMPLETATO! VAI ALL'AREA PERSONALE
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

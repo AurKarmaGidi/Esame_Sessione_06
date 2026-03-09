@@ -1,0 +1,130 @@
+@use 'app/variables' as *;
+
+// ==========================================================================
+// STILI GLOBALI DI BASE
+// ==========================================================================
+body {
+  background-color: $color-bg-dark;
+  color: $color-text-light;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 768px;
+}
+
+.code-pink {
+  color: $color-primary;
+  font-weight: bold;
+}
+
+.text-danger {
+  color: #ff0066 !important;
+}
+
+.footer {
+  background-color: $color-bg-gray-dark;
+  padding: 32px 0 24px;
+  position: relative;
+  z-index: 10;
+  margin-top: auto;
+}
+
+// ==========================================================================
+// SOVRASCRITTURA COLORI DI FOCUS BOOTSTRAP (BORDO ROSA)
+// ==========================================================================
+
+// Input generici, select, textarea
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus,
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible {
+  border-color: $color-primary !important;
+  box-shadow: 0 0 0 0.25rem $color-focus-shadow !important;
+  outline: none !important;
+}
+
+// Input group (per quando l'input è affiancato a un'icona)
+.input-group:focus-within {
+  .form-control,
+  .form-select,
+  .input-group-text {
+    border-color: $color-primary !important;
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    box-shadow: none !important;
+  }
+
+}
+
+// Checkbox e radio (punto rosa quando selezionati)
+.form-check-input:checked {
+  background-color: $color-primary !important;
+  border-color: $color-primary !important;
+}
+
+.form-check-input:focus {
+  border-color: $color-primary !important;
+  box-shadow: 0 0 0 0.25rem $color-focus-shadow !important;
+}
+
+// Range input (slider)
+.form-range:focus::-webkit-slider-thumb {
+  background-color: $color-primary !important;
+  box-shadow: 0 0 0 0.25rem $color-focus-shadow !important;
+}
+
+.form-range:focus::-moz-range-thumb {
+  background-color: $color-primary !important;
+  box-shadow: 0 0 0 0.25rem $color-focus-shadow !important;
+}
+
+// File input
+.form-control[type="file"]:focus {
+  border-color: $color-primary !important;
+  box-shadow: 0 0 0 0.25rem $color-focus-shadow !important;
+}
+
+// Validazione
+.was-validated .form-control:valid:focus,
+.form-control.is-valid:focus {
+  border-color: #198754 !important;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25) !important;
+}
+
+.was-validated .form-control:invalid:focus,
+.form-control.is-invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+// ==========================================================================
+// STILI PER BOTTONE WATCHLIST (OUTLINE PINK)
+// ==========================================================================
+.btn-outline-pink {
+  background-color: transparent !important;
+  border: 1px solid $color-primary !important;
+  color: $color-primary !important;
+  padding: 8px 20px !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary !important;
+    color: white !important;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+  
+  i {
+    font-size: 1rem;
+  }
+}

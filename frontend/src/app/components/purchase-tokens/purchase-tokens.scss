@@ -1,0 +1,187 @@
+@use '../../variables' as *;
+
+// Step di progresso
+.registration-progress {
+  margin-bottom: 5px;
+}
+
+.progress-step {
+  text-align: center;
+  flex: 1;
+  margin-bottom: -40px;
+
+  &.completed {
+    .step-circle {
+      background-color: $color-primary;
+    }
+
+    .step-label {
+      color: white;
+    }
+  }
+
+  &.active {
+    .step-circle {
+      background-color: $color-primary;
+      box-shadow: 0 0 0 5px $color-glow;
+    }
+
+    .step-label {
+      color: $color-primary;
+      font-weight: bold;
+    }
+  }
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: $color-bg-gray-medium;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin: 0 auto 8px;
+  text-decoration: none;
+}
+
+.step-label {
+  font-size: 12px;
+  color: $color-text-gray;
+}
+
+// Linea tra gli step
+.progress-connector {
+  flex: 6;
+  height: 2px;
+  background-color: $color-bg-gray-medium;
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+// Stili per i pacchetti token
+.card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 0, 102, 0.2);
+  }
+  
+  &.border-pink {
+    border-color: $color-primary !important;
+    box-shadow: 0 0 15px rgba(255, 0, 102, 0.3);
+  }
+  
+  &.popular-card {
+    border: 2px solid $color-primary;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, $color-primary, transparent);
+      opacity: 0.1;
+      pointer-events: none;
+    }
+  }
+}
+
+.popular-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: $color-primary;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+// Stili per i campi del form di pagamento
+.input-group-text {
+  background-color: $color-bg-gray;
+  border-color: $color-border-light;
+  color: $color-text-light;
+}
+
+.form-control {
+  background-color: $color-bg-gray !important;
+  border-color: $color-border-light !important;
+  color: $color-text-light !important;
+  
+  &:focus {
+    border-color: $color-primary !important;
+    box-shadow: 0 0 0 0.2rem $color-focus-shadow !important;
+  }
+  
+  &::placeholder {
+    color: $color-text-placeholder-dark;
+  }
+}
+
+// Stili per i radio button
+.form-check-input:checked {
+  background-color: $color-primary;
+  border-color: $color-primary;
+}
+
+// Stili per il bottone rosa
+.btn-pink {
+  background-color: #ff0066 !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 30px !important;
+  font-weight: bold !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+
+  &:hover:not(:disabled) {
+    background-color: #cc0052 !important;
+    transform: scale(1.02) !important;
+  }
+
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+// Stili per il bottone success
+.btn-success {
+  background-color: #28a745 !important;
+  border: none !important;
+  padding: 15px 40px !important;
+  font-weight: bold !important;
+  border-radius: 8px !important;
+  animation: pulse 2s infinite;
+  
+  &:hover {
+    background-color: #218838 !important;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}

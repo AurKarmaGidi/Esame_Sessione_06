@@ -1,0 +1,259 @@
+@use '../../variables' as *;
+// Sfondo grid con overlay - ottimizzato per responsive
+.bg-grid {
+  position: relative;
+  min-height: 500px;
+  height: 100vh;
+  max-height: 800px;
+  overflow: hidden;
+  flex: 1;
+  
+  @media (min-width: $breakpoint-md) {
+    min-height: 600px;
+  }
+}
+
+.bg-grid-tiles {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  z-index: 0;
+
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: $breakpoint-xl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bg-grid-tile {
+  background-size: cover;
+  background-position: center;
+  filter: brightness(1.2);
+  min-height: 150px;
+  
+  @media (min-width: $breakpoint-md) {
+    min-height: 200px;
+  }
+}
+
+.overlay-dark {
+  position: absolute;
+  inset: 0;
+  background: $color-overlay;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Box di registrazione
+.registration-box {
+  position: relative;
+  padding: 30px 20px !important;
+  margin: 0 15px;
+  background-color: rgba(33, 37, 41, 0.95) !important;
+  border-radius: 8px !important;
+  
+  @media (min-width: $breakpoint-md) {
+    padding: 40px 30px !important;
+    margin: 0;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    bottom: -15px;
+    width: 1px;
+    background-color: $color-border-light;
+    display: none;
+    
+    @media (min-width: $breakpoint-md) {
+      display: block;
+      top: -20px;
+      bottom: -20px;
+      width: 2px;
+    }
+  }
+
+  &::before {
+    left: -15px;
+    
+    @media (min-width: $breakpoint-md) {
+      left: -20px;
+    }
+  }
+
+  &::after {
+    right: -15px;
+    
+    @media (min-width: $breakpoint-md) {
+      right: -20px;
+    }
+  }
+  
+  h1 {
+    font-size: 1.6rem;
+    line-height: 1.3;
+    margin-bottom: 1rem !important;
+    
+    @media (min-width: $breakpoint-md) {
+      font-size: 2.2rem;
+    }
+    
+    @media (min-width: $breakpoint-lg) {
+      font-size: 2.5rem;
+    }
+  }
+  
+  p {
+    font-size: 0.95rem;
+    
+    @media (min-width: $breakpoint-md) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Logo inline 
+.logo-inline {
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 3px;
+  
+  @media (min-width: $breakpoint-md) {
+    height: 25px;
+  }
+}
+
+// Form di registrazione
+.registration-form {
+  .email-input {
+    flex: 1;
+    background-color: $color-bg-gray;
+    border: none;
+    padding: 12px;
+    border-radius: 4px 0 0 4px;
+    height: 45px; 
+    
+    @media (min-width: $breakpoint-md) {
+      padding: 15px;
+      height: 50px;
+    }
+
+    &::placeholder {
+      color: $color-text-placeholder;
+      font-size: 0.9rem;
+      
+      @media (min-width: $breakpoint-md) {
+        font-size: 1rem;
+      }
+    }
+
+    &:focus {
+      background-color: $color-bg-gray-light;
+      color: $color-text-light;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+
+// Stili per input email - 
+.email-input {
+  background-color: $color-bg-gray !important;
+  border: 1px solid $color-border-light !important;
+  border-radius: 5px !important; 
+  color: $color-text-light !important;
+  height: 45px !important;
+  width: 100%;
+  padding: 0 15px !important;
+  
+  @media (min-width: $breakpoint-md) {  
+    height: 50px !important;
+  }
+  
+  &:focus {
+    background-color: $color-bg-gray-light !important;
+    border-color: $color-primary !important; 
+    box-shadow: 0 0 0 0.2rem $color-focus-shadow !important;
+    outline: none;
+  }
+  
+  &::placeholder {
+    color: $color-text-placeholder !important;
+  }
+}
+
+// Bottone registrati 
+.btn-registrati {
+  height: 45px !important; 
+  padding: 0 15px !important;
+  font-size: 0.9rem;
+  font-weight: bold;
+  white-space: nowrap;
+  background-color: $color-primary !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 5px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  transition: all 0.3s ease !important;
+  
+  @media (min-width: $breakpoint-md) {
+    height: 50px !important;
+    padding: 0 20px !important;
+    font-size: 1rem;
+  }
+  
+  &:hover:not(:disabled) {
+    background-color: $color-primary-dark !important;
+    transform: scale(1.02);
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Stili per il form inline
+.input-group {
+  flex-wrap: nowrap !important;
+  height: 100%;
+}
+
+// Stili per il modal di login 
+.modal-content {
+  .btn-pink {
+    background-color: $color-primary;
+    border: none;
+    padding: 10px 20px;
+    
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+  
+  .btn-dark {
+    border: 1px solid $color-border-light;
+    
+    &:hover {
+      background-color: $color-bg-gray;
+    }
+  }
+}

@@ -1,0 +1,141 @@
+<!-- Hero dettaglio serie -->
+<div class="movie-hero position-relative mb-4" [style.background-image]="'url(' + series?.poster + ')'">
+  <div class="movie-hero-overlay">
+    <div class="container px-4 ms-3 mb-5 mt-5">
+      <div class="row">
+        <div class="col-md-6 col-lg-5">
+          <h1 class="display-5 fw-bold mb-3">{{ series?.title }}</h1>
+
+          <!-- Durata e Anno -->
+          <div class="movie-meta mb-3">
+            <div class="d-flex flex-column flex-sm-row">
+              <span class="mb-1 mb-sm-0 me-sm-3">Durata episodi: {{ series?.duration }} min</span>
+              <span>Anno: {{ series?.release_year }}</span>
+            </div>
+          </div>
+
+          <p class="mb-3" style="font-size: 11px;">{{ series?.description }}</p>
+
+          <!-- Series info -->
+          <div class="mb-4 movie-info" style="color: #f08fbf; font-size: 11px;">
+            <div class="row">
+              <div class="col-4 col-lg-3 fw-bold pe-3">
+                <div>Regista</div>
+                <div>Genere</div>
+                <div>Stagioni</div>
+                <div>Episodi</div>
+                <div>Lingua</div>
+              </div>
+              <div class="col-8 col-lg-9">
+                <div>{{ series?.director }}</div>
+                <div>{{ series?.series_genre }}</div>
+                <div>{{ series?.seasons }}</div>
+                <div>{{ series?.episodes }}</div>
+                <div>Italiano</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottoni -->
+          <div class="mt-3 d-flex flex-column flex-sm-row flex-wrap gap-2">
+            <!-- Bottone Guarda trailer con controllo autenticazione -->
+            <button class="btn btn-pink text-light mb-2 mb-sm-0" (click)="playTrailer()" [disabled]="!isAuthenticated"
+              [title]="!isAuthenticated ? 'Effettua il login per guardare il trailer' : ''">
+              <i class="bi bi-play-circle me-2"></i>
+              Guarda trailer
+              @if (!isAuthenticated) {
+              <small class="ms-2 opacity-75">(login richiesto)</small>
+              }
+            </button>
+
+            <!-- NUOVO: Bottone Watchlist -->
+            @if (isAuthenticated) {
+            <button class="btn btn-outline-pink mb-2 mb-sm-0" (click)="toggleWatchlist($event)"
+              [disabled]="watchlistLoading">
+              @if (watchlistLoading) {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              } @else {
+              <i class="bi me-2" [ngClass]="{
+          'bi-bookmark-star-fill': isInWatchlist,
+          'bi-bookmark-star': !isInWatchlist
+        }"></i>
+              }
+              {{ isInWatchlist ? 'Nella watchlist' : 'Aggiungi alla watchlist' }}
+            </button>
+            }
+          </div>
+
+          <p class="mt-4" style="font-size: 10px;">
+            Facendo click su Guarda trailer accetti i nostri
+            <a href="#" class="text-decoration-none code-pink">Termini di utilizzo</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sezione Serie correlate -->
+<main class="container-fluid px-3 px-sm-4 pb-4 bg-dark">
+  <br>
+  <section class="mb-1">
+    <div class="d-flex mb-2">
+      <h2 class="section-title h5 code-pink me-1">Serie TV</h2>
+      <h2 class="section-title h5"> / {{ series?.series_genre }}</h2>
+    </div>
+
+    <!-- Carousel -->
+    <div id="seriesCarousel" class="carousel slide movie-carousel" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2 g-sm-3">
+            @for (related of relatedSeries.slice(0,5); track $index) {
+            <div class="col">
+              <a href="javascript:void(0)" class="movie-card text-decoration-none d-block h-100"
+                (click)="goToSeries(related.id, $event)">
+                <img [src]="related.poster" class="img-fluid w-100" [alt]="related.title">
+                <span class="movie-card-title">{{ related.title }}</span>
+              </a>
+            </div>}
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2 g-sm-3">
+            @for (related of relatedSeries.slice(5,10); track $index) {
+            <div class="col">
+              <a href="javascript:void(0)" class="movie-card text-decoration-none d-block h-100"
+                (click)="goToSeries(related.id, $event)">
+                <img [src]="related.poster" class="img-fluid w-100" [alt]="related.title">
+                <span class="movie-card-title">{{ related.title }}</span>
+              </a>
+            </div>}
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2 g-sm-3">
+            @for (related of relatedSeries.slice(10,15); track $index) {
+            <div class="col">
+              <a href="javascript:void(0)" class="movie-card text-decoration-none d-block h-100"
+                (click)="goToSeries(related.id, $event)">
+                <img [src]="related.poster" class="img-fluid w-100" [alt]="related.title">
+                <span class="movie-card-title">{{ related.title }}</span>
+              </a>
+            </div>}
+          </div>
+        </div>
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#seriesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Precedente</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#seriesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Successivo</span>
+      </button>
+    </div>
+  </section>
+</main>

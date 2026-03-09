@@ -1,0 +1,367 @@
+<main class="position-relative" style="background-color: rgb(28, 28, 28);">
+  <!-- Step di progresso -->
+  <div class="flex-grow-1 py-4">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="registration-progress mb-4 mb-md-5">
+            <div class="d-flex justify-content-between position-relative">
+              <div class="progress-step completed">
+                <a class="step-circle" routerLink="/" style="text-decoration: none;">1</a>
+                <div class="step-label">Email</div>
+              </div>
+              <div class="progress-connector"></div>
+              <div class="progress-step active">
+                <div class="step-circle">2</div>
+                <div class="step-label">Dati Personali</div>
+              </div>
+              <div class="progress-connector"></div>
+              <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Conferma</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid p-md-2">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="border-start border-end text-light border-0 p-md-4 mx-auto">
+          <div class="color-bg" data-bs-theme="dark">
+            <h1 class="text-center code-white">REGISTRATI</h1>
+
+            <!-- Form di registrazione -->
+            <form (ngSubmit)="onSubmit()" #registerForm="ngForm"
+              class="row g-3 needs-validation d-flex justify-content-center p-3 p-md-5">
+
+              <hr class="col-10">
+
+              <!-- Nome -->
+              <div class="col-lg-5 col-md-10">
+                <label for="nome" class="form-label">Nome</label>
+                <span class="text-danger">*</span>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person" style="color: gray;"></i>
+                  </span>
+                  <input type="text" class="form-control" id="nome" placeholder="Inserisci il tuo nome"
+                    [(ngModel)]="formData.name" name="nome" required #nome="ngModel">
+                </div>
+                @if (nome.invalid && (nome.dirty || nome.touched)) {
+                <div class="text-danger small">
+                  @if (nome.errors?.['required']) {
+                  <div>Nome è obbligatorio</div>
+                  }
+                </div>
+                }
+              </div>
+
+              <!-- Cognome -->
+              <div class="col-lg-5 col-md-10">
+                <label for="cognome" class="form-label">Cognome</label>
+                <span class="text-danger">*</span>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person" style="color: gray;"></i>
+                  </span>
+                  <input type="text" class="form-control" id="cognome" placeholder="Inserisci il tuo cognome"
+                    [(ngModel)]="formData.surname" name="cognome" required #cognome="ngModel">
+                </div>
+                @if (cognome.invalid && (cognome.dirty || cognome.touched)) {
+                <div class="text-danger small">
+                  @if (cognome.errors?.['required']) {
+                  <div>Cognome è obbligatorio</div>
+                  }
+                </div>
+                }
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-5">
+                <label for="email" class="form-label">E-mail</label>
+                <span class="text-danger">*</span>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope" style="color: gray;"></i>
+                  </span>
+                  <input type="email" class="form-control" id="email" aria-describedby="inputGroupPrepend"
+                    placeholder="Inserisci la tua email" [(ngModel)]="formData.email" name="email" required email
+                    #email="ngModel">
+                </div>
+                @if (email.invalid && (email.dirty || email.touched)) {
+                <div class="text-danger small">
+                  @if (email.errors?.['required']) {
+                  <div>Email è obbligatoria</div>
+                  }
+                  @if (email.errors?.['email']) {
+                  <div>Inserisci un email valida</div>
+                  }
+                </div>
+                }
+              </div>
+
+              <!-- Telefono -->
+              <div class="col-md-5">
+                <label for="telefono" class="form-label">Telefono</label>
+                <div class="input-group">
+                  <span class="input-group-text" style="color: gray;">
+                    <i class="bi bi-telephone"></i>
+                  </span>
+                  <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="es. 3331234567"
+                    [(ngModel)]="formData.telefono" #telefono="ngModel">
+                </div>
+              </div>
+              <!-- Data di nascita -->
+              <div class="col-md-5">
+                <label for="birth_date" class="form-label">Data di nascita</label>
+                <span class="text-danger">*</span>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-calendar" style="color: gray;"></i>
+                  </span>
+                  <input type="date" class="form-control" id="birth_date" [(ngModel)]="formData.birth_date"
+                    name="birth_date" required>
+                </div>
+              </div>
+
+              <!-- Nazione -->
+              <div class="col-md-5">
+                <label for="nazione" class="form-label">Nazione <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-globe" style="color: gray;"></i>
+                  </span>
+                  <input list="nazioni" class="form-control rounded-end" id="nazione" name="nazione"
+                    placeholder="Seleziona o scrivi..." [(ngModel)]="formData.country_code" required #nazione="ngModel">
+                  <datalist id="nazioni">
+                    <option value="Italia">
+                    <option value="Francia">
+                    <option value="Germania">
+                    <option value="Spagna">
+                    <option value="Regno Unito">
+                    <option value="Stati Uniti">
+                  </datalist>
+                </div>
+              </div>
+
+              <!-- Indirizzo -->
+              <div class="col-md-5">
+                <label for="indirizzo" class="form-label">Indirizzo</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-geo-alt" style="color: gray;"></i>
+                  </span>
+                  <input type="text" class="form-control" id="indirizzo" aria-describedby="inputGroupPrepend"
+                    placeholder="Inserisci indirizzo di residenza e numero civico" [(ngModel)]="formData.address"
+                    name="indirizzo">
+                </div>
+              </div>
+
+              <!-- Città -->
+              <div class="col-lg-5">
+                <label for="citta" class="form-label">Città</label>
+                <div class="input-group">
+                  <span class="input-group-text" style="color: gray;">
+                    <i class="bi bi-building"></i>
+                  </span>
+                  <input type="text" class="form-control" id="citta" aria-describedby="inputGroupPrepend"
+                    placeholder="Inserisci la città" [(ngModel)]="formData.city" name="citta">
+                </div>
+              </div>
+
+              <!-- Provincia -->
+              <div class="col-md-5">
+                <label for="provincia" class="form-label">Provincia</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-geo" style="color: gray;"></i>
+                  </span>
+                  <input type="text" class="form-control" id="provincia" aria-describedby="inputGroupPrepend"
+                    placeholder="es. RM" maxlength="2" [(ngModel)]="formData.region" name="provincia">
+                </div>
+              </div>
+
+              <!-- CAP -->
+              <div class="col-md-5">
+                <label for="cap" class="form-label">CAP</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-mailbox" style="color: gray;"></i>
+                  </span>
+                  <input type="text" class="form-control" id="cap" aria-describedby="inputGroupPrepend"
+                    placeholder="Inserisci il cap" [(ngModel)]="formData.zip_code" name="cap">
+                </div>
+              </div>
+
+              <hr class="col-10 mt-5">
+
+              <!-- Password -->
+              <div class="col-lg-5 col-md-10 mb-3">
+                <label for="password" class="form-label">Password</label>
+                <span class="text-danger">*</span>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-key" style="color: gray;"></i>
+                  </span>
+                  <input type="password" class="form-control" id="password" aria-describedby="inputGroupPrepend"
+                    placeholder="Scegli una password" [(ngModel)]="formData.password" name="password" required
+                    minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$" #password="ngModel">
+                  <button class="btn btn-outline-secondary color-primary" type="button"
+                    (click)="togglePassword('password')">
+                    <i class="bi bi-eye code-pink"></i>
+                  </button>
+                </div>
+                @if (password.invalid && (password.dirty || password.touched)) {
+                <div class="text-danger small">
+                  @if (password.errors?.['required']) {
+                  <div>Password è obbligatoria</div>
+                  }
+                  @if (password.errors?.['minlength']) {
+                  <div>Minimo 8 caratteri</div>
+                  }
+                  @if (password.errors?.['pattern']) {
+                  <div>La password deve contenere almeno:</div>
+                  <ul class="mb-0 ps-3">
+                    <li [style.color]="hasLowerCase() ? '#28a745' : '#ff0066'">Una lettera minuscola</li>
+                    <li [style.color]="hasUpperCase() ? '#28a745' : '#ff0066'">Una lettera maiuscola</li>
+                    <li [style.color]="hasNumber() ? '#28a745' : '#ff0066'">Un numero</li>
+                    <li [style.color]="hasSpecialChar() ? '#28a745' : '#ff0066'">Un carattere speciale (!@#$%^&*)</li>
+                  </ul>
+                  }
+                </div>
+                }
+              </div>
+
+              <!-- Conferma Password -->
+              <div class="col-lg-5 col-md-10 mb-3">
+                <label for="confermapsw" class="form-label">Conferma Password</label>
+                <span class="text-danger">*</span>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-key" style="color: gray;"></i>
+                  </span>
+                  <input type="password" class="form-control" id="confermapsw" aria-describedby="inputGroupPrepend"
+                    placeholder="Inserisci di nuovo la tua password" [(ngModel)]="formData.password2" name="password2"
+                    required #password2="ngModel">
+                  <button class="btn btn-outline-secondary color-primary" type="button"
+                    (click)="togglePassword('password2')">
+                    <i class="bi" [ngClass]="{
+          'bi-check-circle-fill': formData.password && formData.password2 && formData.password === formData.password2,
+          'bi-x-circle-fill': formData.password2 && formData.password !== formData.password2,
+          'bi-check-circle': !formData.password2
+        }" [style.color]="getPasswordMatchColor()"></i>
+                  </button>
+                </div>
+                @if (password2.invalid && (password2.dirty || password2.touched)) {
+                <div class="text-danger small">
+                  @if (password2.errors?.['required']) {
+                  <div>Conferma password è obbligatoria</div>
+                  }
+                </div>
+                }
+                @if (formData.password && formData.password2 && formData.password !== formData.password2) {
+                <div class="text-danger small">
+                  Le password non coincidono
+                </div>
+                }
+              </div>
+
+              <!-- Termini e condizioni -->
+              <div class="col-lg-10 col-md-10 col-sm-5 mt-1 ms-3 me-auto">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="invalidCheck" [(ngModel)]="formData.termsAccepted"
+                    name="termini" required #termini="ngModel">
+                  <label class="form-check-label" for="invalidCheck">
+                    Accetto <a href="#" class="code-pink text-decoration-none">Termini e Condizioni</a>
+                    e <a href="#" class="code-pink text-decoration-none">Informativa sulla Privacy</a>
+                    <span class="text-danger">*</span>
+                  </label>
+                </div>
+                @if (termini.invalid && (termini.dirty || termini.touched)) {
+                <div class="text-danger small">
+                  Devi accettare i termini
+                </div>
+                }
+              </div>
+
+              <!-- Marketing -->
+              <div class="col-lg-10 col-md-10 col-sm-5 mt-1 ms-3 me-auto">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="invalidCheck2"
+                    [(ngModel)]="formData.marketingConsent" name="marketing">
+                  <label class="form-check-label" for="invalidCheck2">
+                    Desidero ricevere offerte e comunicazioni marketing via email
+                  </label>
+                </div>
+              </div>
+
+              <!-- Button -->
+              <div class="col-lg-5 col-md-10 mt-5 pt-3 ms-auto me-2 mb-4 d-flex justify-content-end">
+                <button class="btn btn-pink px-5 py-2" type="submit" [disabled]="!registerForm.valid">
+                  Registrati
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal ACCEDI -->
+<div class="modal fade" id="modalAccedi" tabindex="-1" aria-labelledby="modalAccediLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 code-pink" id="modalAccediLabel">LOGIN</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form #loginForm="ngForm">
+          <div class="mb-3">
+            <label for="emailModal" class="form-label">Email</label>
+            <input type="email" class="form-control bg-dark text-white" id="emailModal" [(ngModel)]="loginEmail"
+              name="loginEmail" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="passwordModal" class="form-label">Password</label>
+            <input type="password" class="form-control bg-dark text-white" id="passwordModal"
+              [(ngModel)]="loginPassword" name="loginPassword" required>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-pink btn-sm btn-accedi w-100 w-sm-auto" (click)="onLogin()">ACCEDI</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Messaggi di errore/successo -->
+@if (errorMessage) {
+<div class="alert alert-danger" role="alert">
+  {{ errorMessage }}
+</div>
+}
+
+@if (successMessage) {
+<div class="alert alert-success" role="alert">
+  {{ successMessage }}
+</div>
+}
+
+@if (isLoading) {
+<div class="text-center my-3">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Caricamento...</span>
+  </div>
+</div>
+}

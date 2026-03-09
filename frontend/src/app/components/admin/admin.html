@@ -1,0 +1,658 @@
+<main class="admin-dashboard" style="background-color: rgb(28, 28, 28); min-height: calc(100vh - 200px);">
+  <div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1 class="code-pink">
+            <i class="bi bi-shield-lock-fill me-2"></i>
+            Pannello di Amministrazione
+          </h1>
+          <a routerLink="/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>
+            Torna alla Home
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messaggi -->
+    @if (errorMessage) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+    </div>
+    }
+
+    @if (successMessage) {
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      {{ successMessage }}
+      <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+    </div>
+    }
+
+    <!-- Loading -->
+    @if (loading) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Caricamento...</span>
+      </div>
+    </div>
+    }
+
+    @if (!loading) {
+    <!-- Tabs di navigazione -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <ul class="nav nav-tabs nav-fill">
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'users'" (click)="setTab('users')"
+              href="javascript:void(0)">
+              <i class="bi bi-people-fill me-2"></i>
+              Utenti
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'movies'" (click)="setTab('movies')"
+              href="javascript:void(0)">
+              <i class="bi bi-film me-2"></i>
+              Film
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'series'" (click)="setTab('series')"
+              href="javascript:void(0)">
+              <i class="bi bi-tv-fill me-2"></i>
+              Serie TV
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ==================== GESTIONE UTENTI ==================== -->
+    @if (activeTab === 'users') {
+    <div class="users-tab">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <h4 class="text-white">
+            <i class="bi bi-people-fill me-2 code-pink"></i>
+            Gestione Utenti
+          </h4>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-secondary border-secondary">
+              <i class="bi bi-search code-pink"></i>
+            </span>
+            <input type="text" class="form-control bg-dark text-white border-secondary"
+              placeholder="Cerca utenti per nome, cognome o email..." [(ngModel)]="userSearchTerm">
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <button class="btn btn-pink" (click)="openUserForm()">
+            <i class="bi bi-plus-circle me-2"></i>
+            Nuovo Utente
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Nuovo/Modifica Utente -->
+      @if (showUserForm) {
+      <div class="card bg-dark text-white border-secondary mb-4">
+        <div class="card-header bg-dark border-secondary">
+          <h5 class="mb-0 code-pink">
+            @if (selectedUser) {
+            <i class="bi bi-pencil-square me-2"></i> Modifica Utente
+            } @else {
+            <i class="bi bi-plus-circle me-2"></i> Nuovo Utente
+            }
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveUser()" #userForm="ngForm">
+            <div class="row g-3">
+              <!-- Nome -->
+              <div class="col-md-6">
+                <label class="form-label">Nome *</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.name" name="name" required>
+              </div>
+              
+              <!-- Cognome -->
+              <div class="col-md-6">
+                <label class="form-label">Cognome *</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.surname" name="surname" required>
+              </div>
+              
+              <!-- Email -->
+              <div class="col-md-6">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.email" name="email" required email>
+              </div>
+              
+              <!-- Password (solo per nuovo utente) -->
+              @if (!selectedUser) {
+              <div class="col-md-6">
+                <label class="form-label">Password *</label>
+                <input type="password" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.password" name="password" required minlength="8">
+                <small class="text-secondary">Minimo 8 caratteri</small>
+              </div>
+              }
+              
+              <!-- Ruolo -->
+              <div class="col-md-4">
+                <label class="form-label">Ruolo</label>
+                <select class="form-select bg-dark text-white border-secondary" [(ngModel)]="userFormData.role" name="role">
+                  <option value="guest">Guest</option>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              
+              <!-- Piano -->
+              <div class="col-md-4">
+                <label class="form-label">Piano</label>
+                <select class="form-select bg-dark text-white border-secondary" [(ngModel)]="userFormData.subscription_plan" name="plan">
+                  <option value="free">Free</option>
+                  <option value="premium">Premium</option>
+                  <option value="vip">VIP</option>
+                </select>
+              </div>
+              
+              <!-- Crediti -->
+              <div class="col-md-4">
+                <label class="form-label">Crediti</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.credits" name="credits" min="0" step="0.01">
+              </div>
+              
+              <!-- Data di nascita -->
+              <div class="col-md-4">
+                <label class="form-label">Data di nascita</label>
+                <input type="date" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.birth_date" name="birth_date">
+              </div>
+              
+              <!-- Paese -->
+              <div class="col-md-4">
+                <label class="form-label">Paese</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.country_code" name="country" maxlength="3">
+              </div>
+              
+              <!-- Regione -->
+              <div class="col-md-4">
+                <label class="form-label">Regione</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.region" name="region">
+              </div>
+              
+              <!-- Città -->
+              <div class="col-md-4">
+                <label class="form-label">Città</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.city" name="city">
+              </div>
+              
+              <!-- Indirizzo -->
+              <div class="col-md-4">
+                <label class="form-label">Indirizzo</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.address" name="address">
+              </div>
+              
+              <!-- CAP -->
+              <div class="col-md-4">
+                <label class="form-label">CAP</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="userFormData.zip_code" name="zip">
+              </div>
+              
+              <!-- Bottoni -->
+              <div class="col-12 text-end">
+                <button type="button" class="btn btn-secondary me-2" (click)="cancelUserForm()">
+                  Annulla
+                </button>
+                <button type="submit" class="btn btn-pink" [disabled]="!userForm.valid">
+                  @if (selectedUser) {
+                  <i class="bi bi-check-circle me-2"></i> Aggiorna
+                  } @else {
+                  <i class="bi bi-save me-2"></i> Salva
+                  }
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      }
+
+      <!-- Tabella Utenti -->
+      <div class="row g-3">
+        <div class="col-md-12">
+          <div class="card bg-dark text-white border-secondary">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-dark table-hover code-pink mb-0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Email</th>
+                      <th>Ruolo</th>
+                      <th>Crediti</th>
+                      <th>Piano</th>
+                      <th>Azioni</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (user of filteredUsers; track user.id) {
+                    <tr>
+                      <td>{{ user.id }}</td>
+                      <td>{{ user.name }} {{ user.surname }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>
+                        <span class="badge" [ngClass]="{
+                          'bg-danger': user.role === 'admin',
+                          'bg-primary': user.role === 'user',
+                          'bg-secondary': user.role === 'guest'
+                        }">{{ user.role }}</span>
+                      </td>
+                      <td>
+                        <span class="badge bg-light text-black">{{ user.credits | number:'1.2-2' }}</span>
+                      </td>
+                      <td>
+                        <span class="badge" [ngClass]="{
+                          'bg-success': user.subscription_plan === 'premium',
+                          'bg-warning': user.subscription_plan === 'vip',
+                          'bg-secondary': user.subscription_plan === 'free'
+                        }">{{ user.subscription_plan }}</span>
+                      </td>
+                      
+                      <td>
+                        <div class="btn-group btn-group-sm">
+                          <button class="btn btn-outline-warning" (click)="openUserForm(user)">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button class="btn btn-outline-light" (click)="confirmDeleteUser(user)">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- ==================== GESTIONE FILM ==================== -->
+    @if (activeTab === 'movies') {
+    <div class="movies-tab">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <h4 class="text-white">
+            <i class="bi bi-film me-2 code-pink"></i>
+            Gestione Film
+          </h4>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-secondary border-secondary">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Cerca film..."
+              [(ngModel)]="movieSearchTerm">
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <button class="btn btn-pink" (click)="openMovieForm()">
+            <i class="bi bi-plus-circle me-2"></i>
+            Nuovo Film
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Film -->
+      @if (showMovieForm) {
+      <div class="card bg-dark text-white border-secondary mb-4">
+        <div class="card-header bg-dark border-secondary">
+          <h5 class="mb-0 code-pink">
+            @if (selectedMovie) {
+            <i class="bi bi-pencil-square me-2"></i> Modifica Film
+            } @else {
+            <i class="bi bi-plus-circle me-2"></i> Nuovo Film
+            }
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveMovie()" #movieForm="ngForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Titolo *</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="movieFormData.title" name="title" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Genere *</label>
+                <select class="form-select bg-dark text-white border-secondary" [(ngModel)]="movieFormData.movie_genre"
+                  name="genre" required>
+                  <option value="">Seleziona genere</option>
+                  @for (genre of genres; track genre) {
+                  <option [value]="genre">{{ genre }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Regista *</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="movieFormData.director" name="director" required>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Anno</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="movieFormData.release_year" name="year" min="1900" max="2030">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Durata (min)</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="movieFormData.duration" name="duration" min="1">
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Descrizione</label>
+                <textarea class="form-control bg-dark text-white border-secondary" rows="3"
+                  [(ngModel)]="movieFormData.description" name="description"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">URL Poster</label>
+                <input type="url" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="movieFormData.poster" name="poster">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">URL Trailer (YouTube)</label>
+                <input type="url" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="movieFormData.youtube_link" name="youtube">
+              </div>
+              <div class="col-12 text-end">
+                <button type="button" class="btn btn-secondary me-2" (click)="cancelMovieForm()">
+                  Annulla
+                </button>
+                <button type="submit" class="btn btn-pink" [disabled]="!movieForm.valid">
+                  @if (selectedMovie) {
+                  <i class="bi bi-check-circle me-2"></i> Aggiorna
+                  } @else {
+                  <i class="bi bi-save me-2"></i> Salva
+                  }
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      }
+
+      <!-- Lista Film -->
+      <div class="row g-3">
+        @for (movie of filteredMovies; track movie.id) {
+        <div class="col-md-6 col-lg-4">
+          <div class="card bg-dark text-white border-secondary h-100">
+            <div class="row g-0">
+              <div class="col-4">
+                <img [src]="movie.poster || 'https://via.placeholder.com/150x200?text=No+Poster'"
+                  class="img-fluid rounded-start h-100" style="object-fit: cover;" [alt]="movie.title">
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title code-pink">{{ movie.title }}</h5>
+                  <p class="card-text small text-secondary">
+                    {{ movie.release_year }} · {{ movie.duration }} min
+                  </p>
+                  <p class="card-text small text-secondary">
+                    <i class="bi bi-person me-1"></i> {{ movie.director }}
+                  </p>
+                  <p class="card-text small">
+                    <span class="badge bg-pink">{{ movie.movie_genre }}</span>
+                  </p>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-warning" (click)="openMovieForm(movie)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-light" (click)="confirmDelete('movie', movie.id, movie.title)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- ==================== GESTIONE SERIE ==================== -->
+    @if (activeTab === 'series') {
+    <div class="series-tab">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <h4 class="text-white">
+            <i class="bi bi-tv-fill me-2 code-pink"></i>
+            Gestione Serie TV
+          </h4>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-secondary border-secondary">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Cerca serie..."
+              [(ngModel)]="seriesSearchTerm">
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <button class="btn btn-pink" (click)="openSeriesForm()">
+            <i class="bi bi-plus-circle me-2"></i>
+            Nuova Serie
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Serie -->
+      @if (showSeriesForm) {
+      <div class="card bg-dark text-white border-secondary mb-4">
+        <div class="card-header bg-dark border-secondary">
+          <h5 class="mb-0 code-pink">
+            @if (selectedSeries) {
+            <i class="bi bi-pencil-square me-2"></i> Modifica Serie
+            } @else {
+            <i class="bi bi-plus-circle me-2"></i> Nuova Serie
+            }
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveSeries()" #seriesForm="ngForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Titolo *</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.title" name="title" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Genere *</label>
+                <select class="form-select bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.series_genre" name="genre" required>
+                  <option value="">Seleziona genere</option>
+                  @for (genre of genres; track genre) {
+                  <option [value]="genre">{{ genre }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Regista *</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.director" name="director" required>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Anno</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.release_year" name="year" min="1900" max="2030">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Durata ep. (min)</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.duration" name="duration" min="1">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Numero Stagioni</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.seasons" name="seasons" min="1">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Numero Episodi</label>
+                <input type="number" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.episodes" name="episodes" min="1">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">URL Poster</label>
+                <input type="url" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.poster" name="poster">
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Descrizione</label>
+                <textarea class="form-control bg-dark text-white border-secondary" rows="3"
+                  [(ngModel)]="seriesFormData.description" name="description"></textarea>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">URL Trailer (YouTube)</label>
+                <input type="url" class="form-control bg-dark text-white border-secondary"
+                  [(ngModel)]="seriesFormData.youtube_link" name="youtube">
+              </div>
+              <div class="col-12 text-end">
+                <button type="button" class="btn btn-secondary me-2" (click)="cancelSeriesForm()">
+                  Annulla
+                </button>
+                <button type="submit" class="btn btn-pink" [disabled]="!seriesForm.valid">
+                  @if (selectedSeries) {
+                  <i class="bi bi-check-circle me-2"></i> Aggiorna
+                  } @else {
+                  <i class="bi bi-save me-2"></i> Salva
+                  }
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      }
+
+      <!-- Lista Serie -->
+      <div class="row g-3">
+        @for (series of filteredSeries; track series.id) {
+        <div class="col-md-6 col-lg-4">
+          <div class="card bg-dark text-white border-secondary h-100">
+            <div class="row g-0">
+              <div class="col-4">
+                <img [src]="series.poster || 'https://via.placeholder.com/150x200?text=No+Poster'"
+                  class="img-fluid rounded-start h-100" style="object-fit: cover;" [alt]="series.title">
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title code-pink">{{ series.title }}</h5>
+                  <p class="card-text small text-secondary">
+                    {{ series.release_year }} · {{ series.seasons }} stagioni · {{ series.episodes }} ep.
+                  </p>
+                  <p class="card-text small text-secondary">
+                    <i class="bi bi-person me-1"></i> {{ series.director }}
+                  </p>
+                  <p class="card-text small">
+                    <span class="badge bg-pink">{{ series.series_genre }}</span>
+                  </p>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-warning" (click)="openSeriesForm(series)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-light" (click)="confirmDelete('series', series.id, series.title)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+    }
+  </div>
+</main>
+
+<!-- Modal Conferma Eliminazione Utente -->
+@if (showDeleteUserModal && userToDelete) {
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          Conferma Eliminazione Utente
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDeleteUser()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Sei sicuro di voler eliminare l'utente <strong>"{{ userToDelete.name }} {{ userToDelete.surname }}"</strong>?</p>
+        <p class="text-danger small">Questa azione non può essere annullata e cancellerà tutti i dati associati.</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" (click)="cancelDeleteUser()">Annulla</button>
+        <button type="button" class="btn btn-pink" (click)="deleteUser()">
+          <i class="bi bi-trash me-2"></i>
+          Elimina
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal Conferma Eliminazione Generico (Film/Serie) -->
+@if (showDeleteModal && itemToDelete) {
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          Conferma Eliminazione
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Sei sicuro di voler eliminare <strong>"{{ itemToDelete.title }}"</strong>?</p>
+        <p class="text-danger small">Questa azione non può essere annullata.</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Annulla</button>
+        <button type="button" class="btn btn-danger" (click)="deleteItem()">
+          <i class="bi bi-trash me-2"></i>
+          Elimina
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
